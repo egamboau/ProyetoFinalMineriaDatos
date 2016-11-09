@@ -1,0 +1,203 @@
+---
+title: 'Tarea de R #5'
+author: "Eduardo Gamboa Ureña"
+date: "22 de octubre de 2016"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Análisis del Problema
+Para una compañía aseguradora, es importante tener muchos clientes, seguros que, aún cuando es poco probable que sean utilizados por sus clientes, generen ganancias para ellos y para, en general, los accionistas de la empresa. A fin de lograr esto, es necesario atacar, con la publicidad correcta, al mercado correcto, a fin de que estos futuros clientes puedean obtener, de manera rápida, los productos ofrecidos. 
+A fin de poder conocer el mercado de los seguro para caravanas, un vehiculo que esta equipado para vivir en él, se realizaron muestras de diversoas variables del contexto de futuros clientes, a fin de poder conocer si, dado un cierto grupo de características, la persona compraría un seguro o no. 
+
+## Entendimiento de los Datos
+
+A continuación un diccionario de datos, los cuales serán los analizados en este trabajo:
+
+1. MOSTYPE Tipo de cliente. Categorica. Los posibles valores son:
+    1. Ingreso alto, con niños caros
+    2. provinciano muy importante
+    3. Ancianos de alto estado social
+    4. Ancianos aluentes con apartamentos
+    5. Ancianos mezclados
+    6. Cuidadodes, ya sea de adultos o de niños
+    7. Doble ingreso, sin niños
+    8. familias calse media
+    9. familias modernas completas
+    10. Familias estables
+    11. FAmilias iniciando
+    12. familias jóvenes afluentes
+    13. familia joven, todos estadounidenses
+    14. Cosmopolita joven
+    15. Cosmopolita anciano
+    16. Estudiantes en apartamentos
+    17. Recien graduados en la ciudad
+    18. Joben soltero
+    19. Joven suburbano
+    20. etnicamente diverso
+    21. joven urbano sin beneficios materiales
+    22. varias personas que viven en apartamentos
+    23. Jovenes y creciendo
+    24. Jovenes, baja educacion
+    25. Ancianos jovenes en la ciudad
+    26. Ancianos dueños de casa
+    27. Ancianos en apartamentos
+    28. Ancianos residenciales
+    29. Ancianos sin patio delantero
+    30. Ancianos solteros religiosos
+    31. Católicos con bajo ingreso
+    32. Ancianos mezclados
+    33. Familias largas de baja clase
+    34. Familias largas, con hijos empleados
+    35. Familias de villas
+    36. Familia con adolescentes
+    37. Habitates mezclados de pueblos pequeños
+    38. Familia tradicional
+    39. Familias religiosas largas
+    40  Largas Familia de granjas
+    41. Rurales mezcladas
+
+2. MAANTHUI Numero de casas, de 1 a 10
+3. MGEMOMV tamaño promedio de casa, de 1 a 6
+4. MGEMLEEF Edad promedio.
+    1. 20-30 años
+    2. 30-40 años
+    3. 40-50 años
+    4. 50-60 años
+    5. 60-70 años
+    6. 70-80 años
+5. MOSHOOFD Categórica. Tipo de cliente principal.
+    1. Hedonista exitoso
+    2. Granjero conducido
+    3. Familia Promedio
+    4. Deudor de prestamos para carreras
+    5. Viviendo bien
+    6. Ancianos viajeros
+    7. retirados y religiosos
+    8. Familia con personas adultas
+    9. Familias conservativas
+    10. Granjeros
+6. MGODRK Católicos romanos
+    0. 0%
+    1. 1 - 10%
+    2. 11 - 23%
+    3. 24 - 36%
+    4. 37 - 49%
+    5 50 - 62%
+    6. 63 - 75%
+    7. 76 - 88%
+    8. 89 - 99%
+    9. 100%
+7. MGODPR Protestantes
+8. MGODOV Otra religion
+9. MGODGE Sin Religion
+10. MRELGE Casado
+11. MRELSA Viviendo Juntos
+12. MRELOV Otra relacion
+13. MFALLEEN Solteros
+14. MFGEKIND ocupantes de casa sin niños
+15. MFWEKIND ocupantes de casa sin niños
+16. MOPLHOOG educacion de alto nivel
+17. MOPLMIDD educacion media
+18. MOPLLAAG educacion baja
+19. MBERHOOG alto estatus
+20. MBERZELF Emprendedor
+21. MBERBOER Granjero
+22. MBERMIDD Administrador medio
+23. MBERARBG Trabajador con habilidades
+24. MBERARBO Trabajador sin habilidades
+25. MSKA Clase socuial A
+26. MSKB1 Clase social B1
+27. MSKB2 Clase social B2
+28. MSKC Clase social C
+29. MSKD Clase social D
+30. MHHUUR casa rentada
+31. MHKOOP Dueños de casa
+32. MAUT1 1 auto
+33. MAUT2 2 autos
+34. MAUT0 Sin autos
+35. MZFONDS Servicio nacional de salud
+36. MZPART Seguro de salud privado
+37. MINKM30 Ingreso menor de  30.000
+38. MINK3045 Ingreso entre 30-45.000
+39. MINK4575 Ingreso entre 45-75.000
+40. MINK7512 Ingreso entre 75-122.000
+41. MINK123M Ingreso mayor que 123.000
+42. MINKGEM Ingreso promedio
+43. MKOOPKLA Clase de poder de compra
+44. PWAPART Seguros de contribucion privada de terceras personas
+    0. 0
+    1. 1 a 49
+    2. 50 a 99
+    3. 100 a 199
+    4. 200 a 499
+    5. 500 a 999
+    6. 1000 a 4999
+    7. 5000 a 9999
+    8. 10.000 a 19.999
+    9. 20.000 o mayor
+45. PWABEDR Contribution third party insurance (firms) ...
+46. PWALAND Contribution third party insurane (agriculture)
+47. PPERSAUT Contribution car policies
+48. PBESAUT Contribution delivery van policies
+49. PMOTSCO Contribution motorcycle/scooter policies
+50. PVRAAUT Contribution lorry policies
+51. PAANHANG Contribution trailer policies
+52. PTRACTOR Contribution tractor policies
+53. PWERKT Contribution agricultural machines policies 
+54. PBROM Contribution moped policies
+55. PLEVEN Contribution life insurances
+56. PPERSONG Contribution private accident insurance policies
+57. PGEZONG Contribution family accidents insurance policies
+58. PWAOREG Contribution disability insurance policies
+59. PBRAND Contribution fire policies
+60. PZEILPL Contribution surfboard policies
+61. PPLEZIER Contribution boat policies
+62. PFIETS Contribution bicycle policies
+63. PINBOED Contribution property insurance policies
+64. PBYSTAND Contribution social security insurance policies
+65. AWAPART Number of private third party insurance 1 - 12
+66. AWABEDR Number of third party insurance (firms) ...
+67. AWALAND Number of third party insurane (agriculture)
+68. APERSAUT Number of car policies
+69. ABESAUT Number of delivery van policies
+70. AMOTSCO Number of motorcycle/scooter policies
+71. AVRAAUT Number of lorry policies
+72. AAANHANG Number of trailer policies
+73. ATRACTOR Number of tractor policies
+74. AWERKT Number of agricultural machines policies
+75. ABROM Number of moped policies
+76. ALEVEN Number of life insurances
+77. APERSONG Number of private accident insurance policies
+78. AGEZONG Number of family accidents insurance policies
+79. AWAOREG Number of disability insurance policies
+80. ABRAND Number of fire policies
+81. AZEILPL Number of surfboard policies
+82. APLEZIER Number of boat policies
+83. AFIETS Number of bicycle policies
+84. AINBOED Number of property insurance policies
+85. ABYSTAND Number of social security insurance policies
+86. CARAVAN Number of mobile home policies 0 - 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Exploración de los Datos
+
+## Modelo de Minería de Datos
+
+## Evaluación
+
+## Resultados
