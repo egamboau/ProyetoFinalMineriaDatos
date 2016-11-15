@@ -350,6 +350,3 @@ summary(modelo.logistica)
 #Reflexión
 
 Es importante notar que, en este caso, los datos son mucho mas grandes y con variables numerosas, lo que complcia un poco la creacion de los modelo. Se debe de realizar un estudio mas grande de las variables que se encuentran en el dominio de las observaciones, a fin de poder obtener de manera fiel una prediccion, con cualquier modelo. En el caso de este avance, mas exploracion es necesaria a fin de poder discernir las variables a usar, ademas de un refinamiento en los modelos que se utilizaron para el desarrollo de este documento.
-## Evaluación
-
-## Resultados
