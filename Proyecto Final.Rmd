@@ -1,7 +1,7 @@
 ---
-title: 'Tarea de R #5'
-author: "Eduardo Gamboa Ureña"
-date: "22 de octubre de 2016"
+title: 'Examen #1'
+author: "Eduardo Gamboa Ureña y Malincy Montoya Rodríguez"
+date: "14 de noviembre de 2016"
 output: pdf_document
 ---
 
@@ -11,38 +11,37 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Análisis del Problema
 Para una compañía aseguradora, es importante tener muchos clientes, seguros que, aún cuando es poco probable que sean utilizados por sus clientes, generen ganancias para ellos y para, en general, los accionistas de la empresa. A fin de lograr esto, es necesario atacar, con la publicidad correcta, al mercado correcto, a fin de que estos futuros clientes puedean obtener, de manera rápida, los productos ofrecidos. 
-A fin de poder conocer el mercado de los seguro para caravanas, un vehiculo que esta equipado para vivir en él, se realizaron muestras de diversoas variables del contexto de futuros clientes, a fin de poder conocer si, dado un cierto grupo de características, la persona compraría un seguro o no. 
+A fin de poder conocer el mercado de los seguro para caravanas, un vehículo que está equipado para vivir en él, se realizaron muestras de diversas variables del contexto de futuros clientes, a fin de poder conocer si, dado un cierto grupo de características, la persona compraría un seguro o no. 
 
 ## Entendimiento de los Datos
-
 A continuación un diccionario de datos, los cuales serán los analizados en este trabajo:
 
-1. MOSTYPE Tipo de cliente. Categorica. Los posibles valores son:
+1. MOSTYPE Tipo de cliente. Categórica. Los posibles valores son:
     1. Ingreso alto, con niños caros
-    2. provinciano muy importante
+    2. Provinciano muy importante
     3. Ancianos de alto estado social
     4. Ancianos aluentes con apartamentos
     5. Ancianos mezclados
-    6. Cuidadodes, ya sea de adultos o de niños
+    6. Cuidadores, ya sea de adultos o de niños
     7. Doble ingreso, sin niños
-    8. familias calse media
-    9. familias modernas completas
+    8. Familias clase media
+    9. Familias modernas completas
     10. Familias estables
     11. FAmilias iniciando
-    12. familias jóvenes afluentes
-    13. familia joven, todos estadounidenses
+    12. Familias jóvenes afluentes
+    13. Familia joven, todos estadounidenses
     14. Cosmopolita joven
     15. Cosmopolita anciano
     16. Estudiantes en apartamentos
-    17. Recien graduados en la ciudad
-    18. Joben soltero
+    17. Recién graduados en la ciudad
+    18. Joven soltero
     19. Joven suburbano
-    20. etnicamente diverso
-    21. joven urbano sin beneficios materiales
-    22. varias personas que viven en apartamentos
-    23. Jovenes y creciendo
-    24. Jovenes, baja educacion
-    25. Ancianos jovenes en la ciudad
+    20. Étnicamente diverso
+    21. Joven urbano sin beneficios materiales
+    22. Varias personas que viven en apartamentos
+    23. Jóvenes y creciendo
+    24. Jóvenes, baja educación
+    25. Ancianos jóvenes en la ciudad
     26. Ancianos dueños de casa
     27. Ancianos en apartamentos
     28. Ancianos residenciales
@@ -54,14 +53,14 @@ A continuación un diccionario de datos, los cuales serán los analizados en est
     34. Familias largas, con hijos empleados
     35. Familias de villas
     36. Familia con adolescentes
-    37. Habitates mezclados de pueblos pequeños
+    37. Habitantes mezclados de pueblos pequeños
     38. Familia tradicional
     39. Familias religiosas largas
     40  Largas Familia de granjas
     41. Rurales mezcladas
 
-2. MAANTHUI Numero de casas, de 1 a 10
-3. MGEMOMV tamaño promedio de casa, de 1 a 6
+2. MAANTHUI Número de casas, de 1 a 10
+3. MGEMOMV Tamaño promedio de casa, de 1 a 6
 4. MGEMLEEF Edad promedio.
     1. 20-30 años
     2. 30-40 años
@@ -76,7 +75,7 @@ A continuación un diccionario de datos, los cuales serán los analizados en est
     4. Deudor de prestamos para carreras
     5. Viviendo bien
     6. Ancianos viajeros
-    7. retirados y religiosos
+    7. Retirados y religiosos
     8. Familia con personas adultas
     9. Familias conservativas
     10. Granjeros
@@ -86,25 +85,25 @@ A continuación un diccionario de datos, los cuales serán los analizados en est
 9. MGODGE Sin Religion
 10. MRELGE Casado
 11. MRELSA Viviendo Juntos
-12. MRELOV Otra relacion
+12. MRELOV Otra relación
 13. MFALLEEN Solteros
-14. MFGEKIND ocupantes de casa sin niños
-15. MFWEKIND ocupantes de casa sin niños
-16. MOPLHOOG educacion de alto nivel
-17. MOPLMIDD educacion media
-18. MOPLLAAG educacion baja
-19. MBERHOOG alto estatus
+14. MFGEKIND Ocupantes de casa sin niños
+15. MFWEKIND Ocupantes de casa sin niños
+16. MOPLHOOG Educación de alto nivel
+17. MOPLMIDD Educación media
+18. MOPLLAAG Educación baja
+19. MBERHOOG Alto estatus
 20. MBERZELF Emprendedor
 21. MBERBOER Granjero
 22. MBERMIDD Administrador medio
 23. MBERARBG Trabajador con habilidades
 24. MBERARBO Trabajador sin habilidades
-25. MSKA Clase socuial A
+25. MSKA Clase social A
 26. MSKB1 Clase social B1
 27. MSKB2 Clase social B2
 28. MSKC Clase social C
 29. MSKD Clase social D
-30. MHHUUR casa rentada
+30. MHHUUR Casa rentada
 31. MHKOOP Dueños de casa
 32. MAUT1 1 auto
 33. MAUT2 2 autos
@@ -118,55 +117,55 @@ A continuación un diccionario de datos, los cuales serán los analizados en est
 41. MINK123M Ingreso mayor que 123.000
 42. MINKGEM Ingreso promedio
 43. MKOOPKLA Clase de poder de compra
-44. PWAPART Contribucion de seguros de terceros
-45. PWABEDR Contribucion de seguros de terceros
-46. PWALAND Contribucion de seguros de terceros en agricultura
-47. PPERSAUT Contribucion en contratos de seguros de automoviles
-48. PBESAUT Contribudion en contratos de seguros en camionetas de entrega
-49. PMOTSCO Contribudion en contratos de seguros  motocicletas
-50. PVRAAUT Contribudion en contratos de seguros  de camiones
-51. PAANHANG Contribudion en contratos de seguros de trailers
-52. PTRACTOR Contribudion en contratos de seguros  de tractores
-53. PWERKT Contribudion en contratos de seguros  de maquinas de agrcultura
-54. PBROM PContribudion en contratos de seguros  motocicletas pequeñas
-55. PLEVEN Contribucion de seguros de vida
-56. PPERSONG Contribudion en contratos de seguros  de accidentes privados
-57. PGEZONG Contribudion en contratos de seguros  de accidentes de famiia
-58. PWAOREG Contrato de seguros de contribucion de invalidez
-59. PBRAND Contrato de seguros de contribucion de seguros contra incendios
-60. PZEILPL Contrato de seguros de contribucion en seguros de tablas de surfContribution surfboard policies
-61. PPLEZIER Contrato de seguros de contribucion en seguros de botes
-62. PFIETS Contrato de seguros de contribucion en seguros de bicicletas
-63. PINBOED Contrato de seguros de contribucion de seguros de propiedades
-64. PBYSTAND Contrato de seguros de contribucion de seguro social
-65. AWAPART Numero de seguros de terceros 
-66. AWABEDR Numero de firmas de seguros de terceras personas
-67. AWALAND Numero de seguros de terceras personas
-68. APERSAUT Numero de contratos de seguros de automoviles
-69. ABESAUT Numero de contratos de seguros de camionetas de entrega
-70. AMOTSCO Numero de contratos de seguros de motocicletas o scooter
-71. AVRAAUT Numero de contratos de seguros de camiones
-72. AAANHANG Numero de contratos de seguros de trailer
-73. ATRACTOR Numero de contratos de seguros tractor
-74. AWERKT Numero de contratos de seguros de maquinaria de agricultura
-75. ABROM Numero de contratos de seguros en moticicletas pequeñas
-76. ALEVEN numero de seguros de vida
-77. APERSONG numero de contratos de seguros de accidente privado
-78. AGEZONG numero de contratos de seguros de accidentes familiares
-79. AWAOREG numero de contratos de seguros de invalidez familiares
-80. ABRAND numero de contratos de seguros de incendios
-81. AZEILPL numero de contratos de seguros de tablas de surf
-82. APLEZIER numero de contratos de seguros de botes
-83. AFIETS numero de contratos de seguros de bicicletas
-84. AINBOED numero de contratos de seguros de propiedades
-85. ABYSTAND numero de contratos de seguros de seguro social
-86. CARAVAN numero de contratos de casas moviles. 0 o 1.
+44. PWAPART Contribución de seguros de terceros
+45. PWABEDR Contribución de seguros de terceros
+46. PWALAND Contribución de seguros de terceros en agricultura
+47. PPERSAUT Contribución en contratos de seguros de automóviles
+48. PBESAUT Contribución en contratos de seguros en camionetas de entrega
+49. PMOTSCO Contribución en contratos de seguros  motocicletas
+50. PVRAAUT Contribución en contratos de seguros  de camiones
+51. PAANHANG Contribución en contratos de seguros de trailers
+52. PTRACTOR Contribución en contratos de seguros  de tractores
+53. PWERKT Contribución en contratos de seguros  de maquinas de agrcultura
+54. PBROM Contribución en contratos de seguros  motocicletas pequeñas
+55. PLEVEN Contribución de seguros de vida
+56. PPERSONG Contribución en contratos de seguros de accidentes privados
+57. PGEZONG Contribución en contratos de seguros de accidentes de famiia
+58. PWAOREG Contrato de seguros de contribución de invalidez
+59. PBRAND Contrato de seguros de contribución de seguros contra incendios
+60. PZEILPL Contrato de seguros de contribución en seguros de tablas de surf
+61. PPLEZIER Contrato de seguros de contribución en seguros de botes
+62. PFIETS Contrato de seguros de contribución en seguros de bicicletas
+63. PINBOED Contrato de seguros de contribución de seguros de propiedades
+64. PBYSTAND Contrato de seguros de contribución de seguro social
+65. AWAPART Número de seguros de terceros 
+66. AWABEDR Número de firmas de seguros de terceras personas
+67. AWALAND Número de seguros de terceras personas
+68. APERSAUT Número de contratos de seguros de automóviles
+69. ABESAUT Número de contratos de seguros de camionetas de entrega
+70. AMOTSCO Número de contratos de seguros de motocicletas o scooter
+71. AVRAAUT Número de contratos de seguros de camiones
+72. AAANHANG Número de contratos de seguros de trailer
+73. ATRACTOR Número de contratos de seguros tractor
+74. AWERKT Número de contratos de seguros de maquinaria de agricultura
+75. ABROM Número de contratos de seguros en moticicletas pequeñas
+76. ALEVEN Número de seguros de vida
+77. APERSONG Número de contratos de seguros de accidente privado
+78. AGEZONG Número de contratos de seguros de accidentes familiares
+79. AWAOREG Número de contratos de seguros de invalidez familiares
+80. ABRAND Número de contratos de seguros de incendios
+81. AZEILPL Número de contratos de seguros de tablas de surf
+82. APLEZIER Número de contratos de seguros de botes
+83. AFIETS Número de contratos de seguros de bicicletas
+84. AINBOED Número de contratos de seguros de propiedades
+85. ABYSTAND Número de contratos de seguros de seguro social
+86. CARAVAN Número de contratos de casas móviles. 0 o 1.
 
-Ademas, como notas aclaratorias:
+Además, como notas aclaratorias:
 
-1. Las variables que inician con M son variables de area, no especificas del cliente. Se basan en el codigo ZIP donde el cliente esta ubicado, y reflejan la distribucion de la variable en cuestion
-1. Las siguientes columnas comparte su dominio, los valores que solo pertencen a una sola columa estan especificados en la lista anterior:
-    1. Columnas de la 7 a la 43, todas estas se comportan como porcentajes. Los valores se especifican a continuacion:
+1. Las variables que inician con M son variables de área, no específicas del cliente. Se basan en el código ZIP donde el cliente está ubicado, y reflejan la distribución de la variable en cuestión
+1. Las siguientes columnas comparten su dominio, los valores que solo pertenecen a una sola columna están especificados en la lista anterior:
+    1. Columnas de la 7 a la 43, todas estas se comportan como porcentajes. Los valores se especifican a continuación:
         0. 0%
         1. 1 - 10%
         2. 11 - 23%
@@ -188,13 +187,14 @@ Ademas, como notas aclaratorias:
         7. 5000 a 9999
         8. 10.000 a 19.999
         9. 20.000 o mayor
-    1. Las columnas de la 45  a la 85, son numericas, con rango de 1 a 12
+    1. Las columnas de la 45  a la 85, son numéricas, con rango de 1 a 12
 
 ## Exploración de los Datos
 
-Se procede a cargar los datos, a fin de poder procesarlos en la herramienta. Se brinda tambien una resumen de la estructura de los mismos
+Se procede a cargar los datos, a fin de poder procesarlos en la herramienta. Se brinda también un resumen de la estructura de los mismos
 ```{r carga de datos}
 columnas = c('MOSTYPE', 'MAANTHUI', 'MGEMOMV', 'MGEMLEEF', 'MOSHOOFD', 'MGODRK', 'MGODPR', 'MGODOV', 'MGODGE', 'MRELGE', 'MRELSA', 'MRELOV', 'MFALLEEN', 'MFGEKIND', 'MFWEKIND', 'MOPLHOOG', 'MOPLMIDD', 'MOPLLAAG', 'MBERHOOG', 'MBERZELF', 'MBERBOER', 'MBERMIDD', 'MBERARBG', 'MBERARBO', 'MSKA', 'MSKB1', 'MSKB2', 'MSKC', 'MSKD', 'MHHUUR', 'MHKOOP', 'MAUT1', 'MAUT2', 'MAUT0', 'MZFONDS', 'MZPART', 'MINKM30', 'MINK3045', 'MINK4575', 'MINK7512', 'MINK123M', 'MINKGEM', 'MKOOPKLA', 'PWAPART', 'PWABEDR', 'PWALAND', 'PPERSAUT', 'PBESAUT', 'PMOTSCO', 'PVRAAUT', 'PAANHANG', 'PTRACTOR', 'PWERKT', 'PBROM', 'PLEVEN', 'PPERSONG', 'PGEZONG', 'PWAOREG', 'PBRAND', 'PZEILPL', 'PPLEZIER', 'PFIETS', 'PINBOED', 'PBYSTAND', 'AWAPART', 'AWABEDR', 'AWALAND', 'APERSAUT', 'ABESAUT', 'AMOTSCO', 'AVRAAUT', 'AAANHANG', 'ATRACTOR', 'AWERKT', 'ABROM', 'ALEVEN', 'APERSONG', 'AGEZONG', 'AWAOREG', 'ABRAND', 'AZEILPL', 'APLEZIER', 'AFIETS', 'AINBOED', 'ABYSTAND', 'CARAVAN')
+
 datos = read.table('ticdata2000.txt', header = F, col.names = columnas)
 datos$MOSTYPE <- factor(datos$MOSTYPE)
 datos$MGEMLEEF <- factor(datos$MGEMLEEF)
@@ -266,75 +266,90 @@ datos.entrenamiento <- datos[splitted,]
 datos.prueba <- datos[!splitted,]
 summary(datos.entrenamiento)
 ```
-Una parte importante de estos datos es describir la distribucion de la variable que se desea predecir, la cual es CARAVAN, a fin de conocer cuantos clientes poseen el seguro de caravanas, o no
-```{r grafico seguros caravanas}
+Una parte importante de estos datos es describir la distribución de la variable que se desea predecir, la cual es CARAVAN, a fin de conocer cuantos clientes poseen el seguro de caravanas, o no.
+```{r gráfico seguros caravanas}
 barplot(table(datos.prueba$CARAVAN), 
-        main="Distribucion de compra de seguros",
-        xlab = "Compro un seguro", 
+        main="Distribución de compra de seguros",
+        xlab = "Compró un seguro", 
         ylab="Cantidad")
 ```
 
-Es posible ver que, para los datos de prueba, pocos clientes compraron el seguro de caravanas. Esto hace posible diferenciar que define un comprador de seguros. Es posible verificar la relacion entre los tipos de clientes, a fin de saber que tipo de cliente tiende a comprar el seguro de caravanas
+Es posible ver que, para los datos de prueba, pocos clientes compraron el seguro de caravanas. Esto hace posible diferenciar que define un comprador de seguros. Es posible verificar la relación entre los tipos de clientes, a fin de saber que tipo de cliente tiende a comprar el seguro de caravanas
 
-``` {r grafico seguros y clientes que adquirieron seguro}
+``` {r gráfico seguros y clientes que adquirieron seguro}
 compraronSeguros = datos.entrenamiento[as.integer(datos.entrenamiento$CARAVAN) == 2,]
 barplot(table(compraronSeguros$MOSTYPE),
-        main = "Distribucion de tipos de clientes que compraron seguro",
-        xlab = 'Tipo de cliente',
-        ylab = 'cantidad de clientes')
+        main = "Distribución de tipos de clientes que compraron seguro",
+        xlab = "Tipo de cliente",
+        ylab = "cantidad de clientes")
 ```
-Es sete observar que, de todos los client y es que compraron un seguro, la gran mayoria son familias de clase media, seguido por familias de clase baja, pero que son grandes (tipos 8 y 33 en el conjunto de datos) 
+Es posible observar que, de todos los clientes que compraron un seguro, la gran mayoría son familias de clase media, seguido por familias de clase baja, pero que son grandes (tipos 8 y 33 en el conjunto de datos) 
 
-A fin de poder verificar si existen relaciones entre clientes y adquisicion del producto, es importante conocer la distribucion de los tipos de clientes del conjunto de datos:
-``` {r grafico tipos de clientes}
+A fin de poder verificar si existen relaciones entre clientes y adquisición del producto, es importante conocer la distribución de los tipos de clientes del conjunto de datos:
+``` {r gráfico tipos de clientes}
 barplot(table(datos.entrenamiento$MOSTYPE),
-        main = "Distribucion de tipos de clientes en el conjunto de datos",
+        main = "Distribución de tipos de clientes en el conjunto de datos",
         xlab = 'Tipo de cliente',
         ylab = 'cantidad de clientes')
 ```
 
-Se observa que la mayoria de clientes son familias largas de clae baja. Sin embargo, contastado con el grafico anterior, son pocos tipos de esta clientela que, en proporcion, adquieren un seguro. Esto quiere decir que para las personas que tienen pocos recursos, no les es posible adquirir el seguro que se solicita. 
-A fin de completar el analisis, se procede a comparar las personas que, esta vez, no compraron seguuro, a fin de conocer la proporcion entre los tipos de cliente
+Se observa que la mayoría de clientes son familias largas de clase baja. Sin embargo, contrastado con el gráfico anterior, son pocos tipos de esta clientela que, en proporción, adquieren un seguro. Esto quiere decir que a las personas que tienen pocos recursos, no les es posible adquirir el seguro que se solicita. 
+A fin de completar el análisis, se procede a comparar las personas que, esta vez, no compraron seguro, a fin de conocer la proporción entre los tipos de cliente
 
-``` {r grafico grafico seguros y clientes que NO adquirieron seguro}
+``` {r gráfico seguros y clientes que NO adquirieron seguro}
 noCompraronSeguros = datos.entrenamiento[as.integer(datos.entrenamiento$CARAVAN) == 1,]
 barplot(table(noCompraronSeguros$MOSTYPE),
-        main = "Distribucion de tipos de clientes que no compraron seguro",
+        main = "Distribución de tipos de clientes \nque no compraron seguro",
         xlab = 'Tipo de cliente',
         ylab = 'cantidad de clientes')
 ```
-Aqui es claro ver que la gran mayoria de los clientes que no compraron seguro fueron los de baja clase, lo que puede indicar que la clase es un factor determinante en caso de ser necesaria una prediccion.
+Aquí es claro ver que la gran mayoría de los clientes que no compraron seguro fueron los de baja clase, lo que puede indicar que la clase es un factor determinante en caso de ser necesaria una predicción.
+A continuación se analiza la variable de respuesta por edad promedio para ver si existen relaciones entre ambas variables.
+```{r, tidy=TRUE}
+library("lattice")
+histogram(~MGEMLEEF|CARAVAN,data=datos.entrenamiento,xlab="Edad Promedio", main="Edad Promedio por Seguro Caravana")
+```
+
+Tanto los que adquirieron como los que no adquirieron seguro de caravana presentan el mismo patrón en los rangos de edades promedio. Probablemente, esto implique que no sea una variable determinante para la variable de respuesta.
 
 ## Modelo de Minería de Datos
 
-Para estos datos, se practicaran tres modelos de mineria de datos, a fin de conocer cual es el mas exacto a la hora de realizar las predicciones. A continuacion se implementan dichos modelos:
+Para estos datos, se aplicarán tres modelos de minería de datos, a fin de conocer cual es el más exacto a la hora de realizar las predicciones. A continuación se implementan dichos modelos:
 
-### Arbol de decision
-Se crea un arbol de decision a fin de poder predecir la variable que se desea, es decir, la variable de CARAVAN, utilizando todas las demas como argumentos:
+### Árbol de decisión
+Se crea un árbol de decisión a fin de poder predecir la variable que se desea, es decir, la variable de CARAVAN, utilizando todos las demás como argumentos:
 
-``` {r Creacion arbol decision}
+``` {r Creación árbol decisión}
 library(rpart)
 library(rpart.plot)
-modelo.arbol = rpart(CARAVAN ~ .,
-                     data= datos.entrenamiento)
+modelo.arbol = rpart(CARAVAN ~ ., data= datos.entrenamiento)
 prp(modelo.arbol)
 ```
-Es posible ver que, para este modelo particular, se indicara que, para todas las posibles entradas, el valor sera de cero, lo que quiere decir que ningun cliente comprara un seguro.
+
+Es posible ver que, para este modelo particular, se indicara que, para todas las posibles entradas, el valor será de cero, lo que quiere decir que ningún cliente comprará un seguro.
 
 ###Bosque aleatorio
 Se procede a crear el modelo de árbol aleatorio. EL tamaño del bosque queda con sus valores predeterminados, de 500. 
 ```{r modelo-bosque-aleatorio}
 library(randomForest)
-modelo.bosque = randomForest(CARAVAN ~ .,
-                     data= datos.entrenamiento)
+modelo.bosque = randomForest(CARAVAN ~ ., data= datos.entrenamiento)
 ```
 
-A fin de verificar la creación del modelo, se procede a imprimir uno de los arboles creados en el bosque
-```{r modelo-bosque-aleatorio-imrpimir}
+A fin de verificar la creación del modelo, se procede a imprimir uno de los árboles creados en el bosque
+```{r modelo-bosque-aleatorio-imprimir}
 getTree(modelo.bosque, 3)
 ```
 
+###Regresión Logística
 
+```{r, tidy=TRUE}
+modelo.logistica <- glm(CARAVAN ~ MOSTYPE+MGEMLEEF+AGEZONG, data = datos.entrenamiento, family = binomial)
+summary(modelo.logistica)
+```
+
+#Reflexión
+
+Es importante notar que, en este caso, los datos son mucho mas grandes y con variables numerosas, lo que complcia un poco la creacion de los modelo. Se debe de realizar un estudio mas grande de las variables que se encuentran en el dominio de las observaciones, a fin de poder obtener de manera fiel una prediccion, con cualquier modelo. En el caso de este avance, mas exploracion es necesaria a fin de poder discernir las variables a usar, ademas de un refinamiento en los modelos que se utilizaron para el desarrollo de este documento.
 ## Evaluación
 
 ## Resultados
