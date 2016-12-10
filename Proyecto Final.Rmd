@@ -171,7 +171,7 @@ Además, como notas aclaratorias:
         2. 11 - 23%
         3. 24 - 36%
         4. 37 - 49%
-        5 50 - 62%
+        5. 50 - 62%
         6. 63 - 75%
         7. 76 - 88%
         8. 89 - 99%
@@ -194,7 +194,7 @@ Además, como notas aclaratorias:
 Se procede a cargar los datos, a fin de poder procesarlos en la herramienta. Se brinda también un resumen de la estructura de los mismos
 ```{r carga de datos}
 columnas = c('MOSTYPE', 'MAANTHUI', 'MGEMOMV', 'MGEMLEEF', 'MOSHOOFD', 'MGODRK', 'MGODPR', 'MGODOV', 'MGODGE', 'MRELGE', 'MRELSA', 'MRELOV', 'MFALLEEN', 'MFGEKIND', 'MFWEKIND', 'MOPLHOOG', 'MOPLMIDD', 'MOPLLAAG', 'MBERHOOG', 'MBERZELF', 'MBERBOER', 'MBERMIDD', 'MBERARBG', 'MBERARBO', 'MSKA', 'MSKB1', 'MSKB2', 'MSKC', 'MSKD', 'MHHUUR', 'MHKOOP', 'MAUT1', 'MAUT2', 'MAUT0', 'MZFONDS', 'MZPART', 'MINKM30', 'MINK3045', 'MINK4575', 'MINK7512', 'MINK123M', 'MINKGEM', 'MKOOPKLA', 'PWAPART', 'PWABEDR', 'PWALAND', 'PPERSAUT', 'PBESAUT', 'PMOTSCO', 'PVRAAUT', 'PAANHANG', 'PTRACTOR', 'PWERKT', 'PBROM', 'PLEVEN', 'PPERSONG', 'PGEZONG', 'PWAOREG', 'PBRAND', 'PZEILPL', 'PPLEZIER', 'PFIETS', 'PINBOED', 'PBYSTAND', 'AWAPART', 'AWABEDR', 'AWALAND', 'APERSAUT', 'ABESAUT', 'AMOTSCO', 'AVRAAUT', 'AAANHANG', 'ATRACTOR', 'AWERKT', 'ABROM', 'ALEVEN', 'APERSONG', 'AGEZONG', 'AWAOREG', 'ABRAND', 'AZEILPL', 'APLEZIER', 'AFIETS', 'AINBOED', 'ABYSTAND', 'CARAVAN')
-
+setwd("E:\\Darkstar\\Maestria\\2016\\III_cuatri\\Mineria\\Proyecto\\ProyetoFinalMineriaDatos")
 datos = read.table('ticdata2000.txt', header = F, col.names = columnas)
 datos$MOSTYPE <- factor(datos$MOSTYPE)
 datos$MGEMLEEF <- factor(datos$MGEMLEEF)
@@ -279,7 +279,7 @@ Es posible ver que, para los datos de prueba, pocos clientes compraron el seguro
 ``` {r gráfico seguros y clientes que adquirieron seguro}
 compraronSeguros = datos.entrenamiento[as.integer(datos.entrenamiento$CARAVAN) == 2,]
 barplot(table(compraronSeguros$MOSTYPE),
-        main = "Distribución de tipos de clientes que compraron seguro",
+        main = "Distribución de tipos de clientes que \ncompraron seguro",
         xlab = "Tipo de cliente",
         ylab = "cantidad de clientes")
 ```
@@ -288,7 +288,7 @@ Es posible observar que, de todos los clientes que compraron un seguro, la gran 
 A fin de poder verificar si existen relaciones entre clientes y adquisición del producto, es importante conocer la distribución de los tipos de clientes del conjunto de datos:
 ``` {r gráfico tipos de clientes}
 barplot(table(datos.entrenamiento$MOSTYPE),
-        main = "Distribución de tipos de clientes en el conjunto de datos",
+        main = "Distribución de tipos de clientes  \nen el conjunto de datos",
         xlab = 'Tipo de cliente',
         ylab = 'cantidad de clientes')
 ```
@@ -309,8 +309,50 @@ A continuación se analiza la variable de respuesta por edad promedio para ver s
 library("lattice")
 histogram(~MGEMLEEF|CARAVAN,data=datos.entrenamiento,xlab="Edad Promedio", main="Edad Promedio por Seguro Caravana")
 ```
-
 Tanto los que adquirieron como los que no adquirieron seguro de caravana presentan el mismo patrón en los rangos de edades promedio. Probablemente, esto implique que no sea una variable determinante para la variable de respuesta.
+
+Otro factor que podría ser útil es el ingreso de las familias.
+
+```{r, tidy=TRUE}
+summary(datos.entrenamiento$MINKGEM)
+histogram(~MINKGEM|CARAVAN,data=datos.entrenamiento,xlab="Ingreso promedio", main="Ingreso promedio por Seguro Caravana")
+```
+
+Se observa en el gráfico que la mayoría de familias sin seguro de caravana se concentran en los grupos 3 y 4 que corresponden a 24 - 36% y 37 - 49% de ingreso promedio, respectivamente. Aquellos que si adquirieron seguro tienen mayoría en el grupo de 37 - 49%. Esto no es una separación clara pero podría usarse para intentar resolver el problema.
+
+Ahora se explora otro factor que podría ser útil, la cantidad de seguros de la familia. Se exploran algunos de los tipos de seguro registrados.
+
+```{r, tidy=TRUE}
+#Terceros
+summary(datos.entrenamiento$AWAPART)
+boxplot(as.integer(datos.entrenamiento$AWAPART) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de terceros", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
+#Automóviles
+summary(datos.entrenamiento$APERSAUT)
+boxplot(as.integer(datos.entrenamiento$APERSAUT) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de auto", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
+#Camionetas de reparto
+summary(datos.entrenamiento$ABESAUT)
+boxplot(as.integer(datos.entrenamiento$ABESAUT) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de camionetas", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
+#Motocicletas
+summary(datos.entrenamiento$AMOTSCO)
+boxplot(as.integer(datos.entrenamiento$AMOTSCO) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de motocicletas", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
+#Camiones
+summary(datos.entrenamiento$AVRAAUT)
+boxplot(as.integer(datos.entrenamiento$AVRAAUT) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de camiones", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
+#Seguros de vida
+summary(datos.entrenamiento$ALEVEN)
+boxplot(as.integer(datos.entrenamiento$ALEVEN) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de vida", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
+#Accidentes
+summary(datos.entrenamiento$AGEZONG)
+boxplot(as.integer(datos.entrenamiento$AGEZONG) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de accidentes familiares", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
+#Propiedades
+summary(datos.entrenamiento$AINBOED)
+boxplot(as.integer(datos.entrenamiento$AINBOED) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de propiedades", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
+#Seguro social
+summary(datos.entrenamiento$ABYSTAND)
+boxplot(as.integer(datos.entrenamiento$ABYSTAND) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de seguro social", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
+```
+
+En los gráficos referentes a números de contratos de seguros se ve que no existe un claro patrón que señale diferencias entre los datos de los que adquirieron en seguro de caravanas y los que no. De hecho, muchos de los gráficos muestran similitudes grandes entre ambos lados. Estas variables no tienen mayor significancia para averiguar que influye en la compra de este seguro.
 
 ## Modelo de Minería de Datos
 
@@ -324,6 +366,9 @@ library(rpart)
 library(rpart.plot)
 modelo.arbol = rpart(CARAVAN ~ ., data= datos.entrenamiento)
 prp(modelo.arbol)
+
+modelo2.arbol = rpart(CARAVAN ~ MOSTYPE+MGEMLEEF+MINKGEM, data= datos.entrenamiento)
+prp(modelo2.arbol)
 ```
 
 Es posible ver que, para este modelo particular, se indicara que, para todas las posibles entradas, el valor será de cero, lo que quiere decir que ningún cliente comprará un seguro.
@@ -333,20 +378,26 @@ Se procede a crear el modelo de árbol aleatorio. EL tamaño del bosque queda co
 ```{r modelo-bosque-aleatorio}
 library(randomForest)
 modelo.bosque = randomForest(CARAVAN ~ ., data= datos.entrenamiento)
+modelo2.bosque = randomForest(CARAVAN ~ MOSTYPE+MGEMLEEF+MINKGEM, data= datos.entrenamiento)
+
 ```
 
 A fin de verificar la creación del modelo, se procede a imprimir uno de los árboles creados en el bosque
 ```{r modelo-bosque-aleatorio-imprimir}
 getTree(modelo.bosque, 3)
+getTree(modelo2.bosque, 3)
 ```
 
 ###Regresión Logística
 
 ```{r, tidy=TRUE}
-modelo.logistica <- glm(CARAVAN ~ MOSTYPE+MGEMLEEF+AGEZONG, data = datos.entrenamiento, family = binomial)
+modelo.logistica <- glm(CARAVAN ~ ., data = datos.entrenamiento, family = binomial)
 summary(modelo.logistica)
+
+modelo2.logistica <- glm(CARAVAN ~ MOSTYPE+MGEMLEEF+MINKGEM, data = datos.entrenamiento, family = binomial)
+summary(modelo2.logistica)
 ```
 
-#Reflexión
+#Evaluación
 
-Es importante notar que, en este caso, los datos son mucho mas grandes y con variables numerosas, lo que complcia un poco la creacion de los modelo. Se debe de realizar un estudio mas grande de las variables que se encuentran en el dominio de las observaciones, a fin de poder obtener de manera fiel una prediccion, con cualquier modelo. En el caso de este avance, mas exploracion es necesaria a fin de poder discernir las variables a usar, ademas de un refinamiento en los modelos que se utilizaron para el desarrollo de este documento.
+#Resultados
