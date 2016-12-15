@@ -1,7 +1,7 @@
 ---
-title: 'Examen #1'
+title: 'Proyecto Final'
 author: "Eduardo Gamboa Ureña y Malincy Montoya Rodríguez"
-date: "14 de noviembre de 2016"
+date: "diciembre de 2016"
 output: pdf_document
 ---
 
@@ -265,6 +265,7 @@ splitted <- sample.split(datos, SplitRatio = 0.7)
 datos.entrenamiento <- datos[splitted,]
 datos.prueba <- datos[!splitted,]
 summary(datos.entrenamiento)
+summary(datos.prueba)
 ```
 Una parte importante de estos datos es describir la distribución de la variable que se desea predecir, la cual es CARAVAN, a fin de conocer cuantos clientes poseen el seguro de caravanas, o no.
 ```{r gráfico seguros caravanas}
@@ -358,46 +359,130 @@ En los gráficos referentes a números de contratos de seguros se ve que no exis
 
 Para estos datos, se aplicarán tres modelos de minería de datos, a fin de conocer cual es el más exacto a la hora de realizar las predicciones. A continuación se implementan dichos modelos:
 
-### Árbol de decisión
-Se crea un árbol de decisión a fin de poder predecir la variable que se desea, es decir, la variable de CARAVAN, utilizando todos las demás como argumentos:
-
-``` {r Creación árbol decisión}
-library(rpart)
-library(rpart.plot)
-modelo.arbol = rpart(CARAVAN ~ ., data= datos.entrenamiento)
-prp(modelo.arbol)
-
-modelo2.arbol = rpart(CARAVAN ~ MOSTYPE+MGEMLEEF+MINKGEM, data= datos.entrenamiento)
-prp(modelo2.arbol)
-```
-
-Es posible ver que, para este modelo particular, se indicara que, para todas las posibles entradas, el valor será de cero, lo que quiere decir que ningún cliente comprará un seguro.
-
-###Bosque aleatorio
-Se procede a crear el modelo de árbol aleatorio. EL tamaño del bosque queda con sus valores predeterminados, de 500. 
-```{r modelo-bosque-aleatorio}
-library(randomForest)
-modelo.bosque = randomForest(CARAVAN ~ ., data= datos.entrenamiento)
-modelo2.bosque = randomForest(CARAVAN ~ MOSTYPE+MGEMLEEF+MINKGEM, data= datos.entrenamiento)
-
-```
-
-A fin de verificar la creación del modelo, se procede a imprimir uno de los árboles creados en el bosque
-```{r modelo-bosque-aleatorio-imprimir}
-getTree(modelo.bosque, 3)
-getTree(modelo2.bosque, 3)
-```
-
 ###Regresión Logística
 
 ```{r, tidy=TRUE}
 modelo.logistica <- glm(CARAVAN ~ ., data = datos.entrenamiento, family = binomial)
 summary(modelo.logistica)
+```
 
-modelo2.logistica <- glm(CARAVAN ~ MOSTYPE+MGEMLEEF+MINKGEM, data = datos.entrenamiento, family = binomial)
+El modelo con todas las variables muestra algunas variables ficticias con significancia, se desechan las que no aparecen entre ellas y se intenta un nuevo modelo.
+```{r, tidy=TRUE}
+modelo2.logistica <- glm(CARAVAN ~ MGODRK + MGODOV + MGODGE + MFWEKIND + MOPLHOOG + MBERZELF + MBERBOER + MBERMIDD + MBERARBG + MBERARBO + MAUT0 + PPERSAUT, data = datos.entrenamiento, family = binomial)
 summary(modelo2.logistica)
+```
+
+El segundo modelo sigue mostrando variables sin significancia y el AIC bajó. Se intenta un nuevo modelo.
+```{r, tidy=TRUE}
+modelo3.logistica <- glm(CARAVAN ~ MGODRK + MGODOV + MGODGE + MOPLHOOG + MBERMIDD + MBERARBG + MBERARBO + MAUT0 + PPERSAUT, data = datos.entrenamiento, family = binomial)
+summary(modelo3.logistica)
+```
+
+El AIC bajó aún más pero aún no todas las variables tienen significancia.
+
+### Árbol de decisión
+
+Se crea un árbol de decisión a fin de poder predecir la variable que se desea, es decir, la variable de CARAVAN, utilizando todos las demás como argumentos:
+``` {r Creación árbol decisión}
+library(rpart)
+library(rpart.plot)
+modelo.arbol = rpart(CARAVAN ~ ., data= datos.entrenamiento)
+prp(modelo.arbol)
+```
+
+Es posible ver que, para este modelo en particular, se indicara que, para todas las posibles entradas, el valor será de cero, lo que quiere decir que ningún cliente comprará un seguro.
+Ahora se intenta usar las variables del último modelo de regresión lineal.
+```{r, tidy=TRUE}
+modelo2.arbol = rpart(CARAVAN ~ MGODRK + MGODOV + MGODGE + MOPLHOOG + MBERMIDD + MBERARBG + MBERARBO + MAUT0 + PPERSAUT, data = datos.entrenamiento)
+prp(modelo2.arbol)
+```
+
+Nuevamente se obtiene el mismo resultado.
+
+###Bosque aleatorio
+
+Se procede a crear el modelo de árbol aleatorio. EL tamaño del bosque queda con sus valores predeterminados, de 500. 
+```{r modelo-bosque-aleatorio}
+library(randomForest)
+modelo.bosque = randomForest(CARAVAN ~ ., data= datos.entrenamiento)
+modelo2.bosque = randomForest(CARAVAN ~ MGODRK + MGODOV + MGODGE + MOPLHOOG + MBERMIDD + MBERARBG + MBERARBO + MAUT0 + PPERSAUT, data= datos.entrenamiento)
+```
+
+A fin de verificar la creación del modelo, se procede a imprimir uno de los árboles creados en los bosques
+```{r modelo-bosque-aleatorio-imprimir}
+getTree(modelo.bosque, 3)
+getTree(modelo2.bosque, 3)
 ```
 
 #Evaluación
 
++ Regresión Logística
+
+```{r,tidy=TRUE}
+library(ROCR)
+library(pROC)
+regresion.prueba <- datos.prueba
+regresion.prueba$probabilidades <- predict(modelo.logistica, newdata = regresion.prueba)
+regresion.prueba$proba_si <- predict(modelo.logistica, newdata = datos.prueba, type = "response")
+table(regresion.prueba$CARAVAN, regresion.prueba$proba_si >= 0.5)
+
+datos.entrenamiento$MRELSA
+datos.prueba$MRELSA
+
+#Sensibilidad
+1/(1+13)
+#Especificidad
+95/(95+4)
+  #Exactitud
+(95+1)/nrow(regresion.test)
+#ROC
+regresion.roc <- prediction(regresion.test$yes_prob, regresion.test$family.history)
+as.numeric(performance(regresion.roc,"auc")@y.values)
+```
+
++ Árbol de Decisión
+
+```{r,tidy=TRUE}
+predicciones.arbol <- predict(modelo2.arbol, newdata = datos.prueba)
+head(predicciones.arbol)
+summary(predicciones.arbol)
+table(datos.prueba$CARAVAN, predicciones.arbol[, 2] >= 0.5)
+
+#Exactitud
+(1659+0)/nrow(datos.prueba)
+#Sensibilidad
+0/(0+0)
+#Especificidad
+1659/(1659+104)
+#ROC
+roc.arbol <- prediction(predicciones.arbol[, 2], as.numeric(datos.prueba$CARAVAN)-1)
+as.numeric(performance(roc.arbol, "auc")@y.values)
+```
+
+El árbol de decisión funciona casi que como modelo ingenuo, pues un modelo ingenuo puede decidir usando el valor de la mayoría, en este caso no comprar seguro. El porcentaje de exactitud es de 94% pero esto puede deberse solo a que la mayoría de clientes no compraron seguro.
+
++ Bosque Aleatorio
+
+```{r,tidy=TRUE}
+predicciones.bosque <- predict(modelo2.bosque, newdata = datos.prueba, type = 'prob')
+head(predicciones.bosque)
+table(datos.prueba$CARAVAN, predicciones.bosque[, 2] >= 0.5)
+
+#Exactitud
+(1631+4)/nrow(datos.prueba)
+#Sensibilidad
+4/(4+28)
+#Especificidad
+1630/(1630+100)
+#ROC
+roc.bosque <- prediction(predicciones.bosque[, 2], as.numeric(datos.prueba$CARAVAN)-1)
+as.numeric(performance(roc.bosque, "auc")@y.values)
+```
+
+La exactitud del modelo es de 92%, especificidad de 94%. Sin embargo, su sensibilidad es tan solo de 12%.
+
 #Resultados
+
++ La exactitud de los modelos es bastante alta, sin embargo esto puede ser porque la mayoría de las observaciones indican que no compraron seguro de caravana.
++ La sensibilidad es prácticamente nula, si identificar correctamente a los que compran seguro es muy importante, el modelo no hace buen trabajo.
++ Los modelos no parecen ser adecuados para contestar la pregunta inicial.
