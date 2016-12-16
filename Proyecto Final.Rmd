@@ -1,7 +1,7 @@
 ---
 title: 'Proyecto Final'
 author: "Eduardo Gamboa Ureña y Malincy Montoya Rodríguez"
-date: "diciembre de 2016"
+date: "15 diciembre de 2016"
 output: pdf_document
 ---
 
@@ -264,8 +264,10 @@ set.seed(123456)
 splitted <- sample.split(datos, SplitRatio = 0.7)
 datos.entrenamiento <- datos[splitted,]
 datos.prueba <- datos[!splitted,]
-summary(datos.entrenamiento)
-summary(datos.prueba)
+#summary(datos.entrenamiento)
+#summary(datos.prueba)
+#Retirar factores 5 y 6 de PINBOED de datos de prueba porque no está en datos de entrenamiento
+datos.prueba <- datos.prueba[datos.prueba$PINBOED != 6 & datos.prueba$PINBOED != 5,]
 ```
 Una parte importante de estos datos es describir la distribución de la variable que se desea predecir, la cual es CARAVAN, a fin de conocer cuantos clientes poseen el seguro de caravanas, o no.
 ```{r gráfico seguros caravanas}
@@ -315,7 +317,7 @@ Tanto los que adquirieron como los que no adquirieron seguro de caravana present
 Otro factor que podría ser útil es el ingreso de las familias.
 
 ```{r, tidy=TRUE}
-summary(datos.entrenamiento$MINKGEM)
+#summary(datos.entrenamiento$MINKGEM)
 histogram(~MINKGEM|CARAVAN,data=datos.entrenamiento,xlab="Ingreso promedio", main="Ingreso promedio por Seguro Caravana")
 ```
 
@@ -325,31 +327,31 @@ Ahora se explora otro factor que podría ser útil, la cantidad de seguros de la
 
 ```{r, tidy=TRUE}
 #Terceros
-summary(datos.entrenamiento$AWAPART)
+#summary(datos.entrenamiento$AWAPART)
 boxplot(as.integer(datos.entrenamiento$AWAPART) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de terceros", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
 #Automóviles
-summary(datos.entrenamiento$APERSAUT)
+#summary(datos.entrenamiento$APERSAUT)
 boxplot(as.integer(datos.entrenamiento$APERSAUT) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de auto", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
 #Camionetas de reparto
-summary(datos.entrenamiento$ABESAUT)
+#summary(datos.entrenamiento$ABESAUT)
 boxplot(as.integer(datos.entrenamiento$ABESAUT) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de camionetas", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
 #Motocicletas
-summary(datos.entrenamiento$AMOTSCO)
+#summary(datos.entrenamiento$AMOTSCO)
 boxplot(as.integer(datos.entrenamiento$AMOTSCO) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de motocicletas", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
 #Camiones
-summary(datos.entrenamiento$AVRAAUT)
+#summary(datos.entrenamiento$AVRAAUT)
 boxplot(as.integer(datos.entrenamiento$AVRAAUT) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de camiones", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
 #Seguros de vida
-summary(datos.entrenamiento$ALEVEN)
+#summary(datos.entrenamiento$ALEVEN)
 boxplot(as.integer(datos.entrenamiento$ALEVEN) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de vida", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
 #Accidentes
-summary(datos.entrenamiento$AGEZONG)
+#summary(datos.entrenamiento$AGEZONG)
 boxplot(as.integer(datos.entrenamiento$AGEZONG) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de accidentes familiares", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
 #Propiedades
-summary(datos.entrenamiento$AINBOED)
+#summary(datos.entrenamiento$AINBOED)
 boxplot(as.integer(datos.entrenamiento$AINBOED) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de propiedades", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
 #Seguro social
-summary(datos.entrenamiento$ABYSTAND)
+#summary(datos.entrenamiento$ABYSTAND)
 boxplot(as.integer(datos.entrenamiento$ABYSTAND) ~ datos.entrenamiento$CARAVAN, main = "Distribución Seguros de seguro social", ylab = "Cantidad", xlab = "¿Seguro Caravana?")
 ```
 
@@ -363,7 +365,7 @@ Para estos datos, se aplicarán tres modelos de minería de datos, a fin de cono
 
 ```{r, tidy=TRUE}
 modelo.logistica <- glm(CARAVAN ~ ., data = datos.entrenamiento, family = binomial)
-summary(modelo.logistica)
+#summary(modelo.logistica)
 ```
 
 El modelo con todas las variables muestra algunas variables ficticias con significancia, se desechan las que no aparecen entre ellas y se intenta un nuevo modelo.
@@ -410,8 +412,7 @@ modelo2.bosque = randomForest(CARAVAN ~ MGODRK + MGODOV + MGODGE + MOPLHOOG + MB
 
 A fin de verificar la creación del modelo, se procede a imprimir uno de los árboles creados en los bosques
 ```{r modelo-bosque-aleatorio-imprimir}
-getTree(modelo.bosque, 3)
-getTree(modelo2.bosque, 3)
+#getTree(modelo3.bosque, 3)
 ```
 
 #Evaluación
@@ -422,22 +423,19 @@ getTree(modelo2.bosque, 3)
 library(ROCR)
 library(pROC)
 regresion.prueba <- datos.prueba
-regresion.prueba$probabilidades <- predict(modelo.logistica, newdata = regresion.prueba)
-regresion.prueba$proba_si <- predict(modelo.logistica, newdata = datos.prueba, type = "response")
+regresion.prueba$probabilidades <- predict(modelo3.logistica, newdata = regresion.prueba)
+regresion.prueba$proba_si <- predict(modelo3.logistica, newdata = datos.prueba, type = "response")
 table(regresion.prueba$CARAVAN, regresion.prueba$proba_si >= 0.5)
 
-datos.entrenamiento$MRELSA
-datos.prueba$MRELSA
-
-#Sensibilidad
-1/(1+13)
+# Sensibilidad
+0/(0 + 95)
 #Especificidad
-95/(95+4)
+1662/(1662 + 1)
   #Exactitud
-(95+1)/nrow(regresion.test)
+(1662 + 0)/nrow(regresion.prueba)
 #ROC
-regresion.roc <- prediction(regresion.test$yes_prob, regresion.test$family.history)
-as.numeric(performance(regresion.roc,"auc")@y.values)
+regresion.roc <- prediction(regresion.prueba$proba_si, regresion.prueba$CARAVAN)
+as.numeric(performance(regresion.roc, "auc")@y.values)
 ```
 
 + Árbol de Decisión
@@ -449,13 +447,13 @@ summary(predicciones.arbol)
 table(datos.prueba$CARAVAN, predicciones.arbol[, 2] >= 0.5)
 
 #Exactitud
-(1659+0)/nrow(datos.prueba)
+(1663 + 0)/nrow(datos.prueba)
 #Sensibilidad
 0/(0+0)
 #Especificidad
-1659/(1659+104)
+1663/(1663 + 95)
 #ROC
-roc.arbol <- prediction(predicciones.arbol[, 2], as.numeric(datos.prueba$CARAVAN)-1)
+roc.arbol <- prediction(predicciones.arbol[, 2], as.numeric(datos.prueba$CARAVAN) -1)
 as.numeric(performance(roc.arbol, "auc")@y.values)
 ```
 
@@ -469,20 +467,21 @@ head(predicciones.bosque)
 table(datos.prueba$CARAVAN, predicciones.bosque[, 2] >= 0.5)
 
 #Exactitud
-(1631+4)/nrow(datos.prueba)
+(1635 + 2)/nrow(datos.prueba)
 #Sensibilidad
-4/(4+28)
+2/(2 + 28)
 #Especificidad
-1630/(1630+100)
+1635/(1635 + 93)
 #ROC
-roc.bosque <- prediction(predicciones.bosque[, 2], as.numeric(datos.prueba$CARAVAN)-1)
+roc.bosque <- prediction(predicciones.bosque[, 2], as.numeric(datos.prueba$CARAVAN) -1)
 as.numeric(performance(roc.bosque, "auc")@y.values)
 ```
 
-La exactitud del modelo es de 92%, especificidad de 94%. Sin embargo, su sensibilidad es tan solo de 12%.
+La exactitud del modelo es de 93%, especificidad de 95%. Sin embargo, su sensibilidad es tan solo de 6%.
 
 #Resultados
 
-+ La exactitud de los modelos es bastante alta, sin embargo esto puede ser porque la mayoría de las observaciones indican que no compraron seguro de caravana.
++ La exactitud de los modelos es bastante alta, sin embargo esto puede ser porque la mayoría de las
+observaciones indican que no compraron seguro de caravana.
 + La sensibilidad es prácticamente nula, si identificar correctamente a los que compran seguro es muy importante, el modelo no hace buen trabajo.
-+ Los modelos no parecen ser adecuados para contestar la pregunta inicial.
++ Los modelos no parecen ser adecuados para determinar si un cliente adquirirá un seguro de caravana.
