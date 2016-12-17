@@ -429,14 +429,20 @@ regresion.prueba$proba_si <- predict(modelo3.logistica, newdata = datos.prueba, 
 table(regresion.prueba$CARAVAN, regresion.prueba$proba_si >= 0.5)
 
 # Sensibilidad
-0/(0 + 95)
+0/(0 + 104)
 #Especificidad
-1662/(1662 + 1)
+1658/(1658 + 0)
   #Exactitud
-(1662 + 0)/nrow(regresion.prueba)
+(1658 + 0)/nrow(regresion.prueba)
 #ROC
 regresion.roc <- prediction(regresion.prueba$proba_si, regresion.prueba$CARAVAN)
 as.numeric(performance(regresion.roc, "auc")@y.values)
+ROCR.logistica  <- performance(regresion.roc, "tpr", "fpr")
+plot(ROCR.logistica,
+main = 'Curva ROC - regresion logistica',
+print.cutoffs.at = seq(0.1, by=0.1),
+colorize=T,
+text.adj = c(-0.2, 1.7))
 ```
 
 + Árbol de Decisión
@@ -448,14 +454,16 @@ summary(predicciones.arbol)
 table(datos.prueba$CARAVAN, predicciones.arbol[, 2] >= 0.5)
 
 #Exactitud
-(1663 + 0)/nrow(datos.prueba)
+(1658 + 0)/nrow(datos.prueba)
 #Sensibilidad
-0/(0+0)
+0/(104+0)
 #Especificidad
-1663/(1663 + 95)
+1658/(1658 + 95)
 #ROC
 roc.arbol <- prediction(predicciones.arbol[, 2], as.numeric(datos.prueba$CARAVAN) -1)
 as.numeric(performance(roc.arbol, "auc")@y.values)
+ROCR.arbolDecision  <- performance(roc.arbol, "tpr", "fpr")
+
 ```
 
 El árbol de decisión funciona casi que como modelo ingenuo, pues un modelo ingenuo puede decidir usando el valor de la mayoría, en este caso no comprar seguro. El porcentaje de exactitud es de 94% pero esto puede deberse solo a que la mayoría de clientes no compraron seguro.
@@ -468,17 +476,23 @@ head(predicciones.bosque)
 table(datos.prueba$CARAVAN, predicciones.bosque[, 2] >= 0.5)
 
 #Exactitud
-(1635 + 2)/nrow(datos.prueba)
+(1630 + 4)/nrow(datos.prueba)
 #Sensibilidad
-2/(2 + 28)
+4/(100 + 4)
 #Especificidad
-1635/(1635 + 93)
+1630/(1630 + 28)
 #ROC
 roc.bosque <- prediction(predicciones.bosque[, 2], as.numeric(datos.prueba$CARAVAN) -1)
 as.numeric(performance(roc.bosque, "auc")@y.values)
+ROCR.bosque  <- performance(roc.bosque, "tpr", "fpr")
+plot(ROCR.bosque,
+main = 'Curva ROC - regresion logistica',
+print.cutoffs.at = seq(0.1, by=0.1),
+colorize=T,
+text.adj = c(-0.2, 1.7))
 ```
 
-La exactitud del modelo es de 93%, especificidad de 95%. Sin embargo, su sensibilidad es tan solo de 6%.
+La exactitud del modelo es de 93%, especificidad de 98%. Sin embargo, su sensibilidad es tan solo de 3%.
 
 #Resultados
 
