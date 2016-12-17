@@ -194,7 +194,6 @@ Además, como notas aclaratorias:
 Se procede a cargar los datos, a fin de poder procesarlos en la herramienta. Se brinda también un resumen de la estructura de los mismos
 ```{r carga de datos}
 columnas = c('MOSTYPE', 'MAANTHUI', 'MGEMOMV', 'MGEMLEEF', 'MOSHOOFD', 'MGODRK', 'MGODPR', 'MGODOV', 'MGODGE', 'MRELGE', 'MRELSA', 'MRELOV', 'MFALLEEN', 'MFGEKIND', 'MFWEKIND', 'MOPLHOOG', 'MOPLMIDD', 'MOPLLAAG', 'MBERHOOG', 'MBERZELF', 'MBERBOER', 'MBERMIDD', 'MBERARBG', 'MBERARBO', 'MSKA', 'MSKB1', 'MSKB2', 'MSKC', 'MSKD', 'MHHUUR', 'MHKOOP', 'MAUT1', 'MAUT2', 'MAUT0', 'MZFONDS', 'MZPART', 'MINKM30', 'MINK3045', 'MINK4575', 'MINK7512', 'MINK123M', 'MINKGEM', 'MKOOPKLA', 'PWAPART', 'PWABEDR', 'PWALAND', 'PPERSAUT', 'PBESAUT', 'PMOTSCO', 'PVRAAUT', 'PAANHANG', 'PTRACTOR', 'PWERKT', 'PBROM', 'PLEVEN', 'PPERSONG', 'PGEZONG', 'PWAOREG', 'PBRAND', 'PZEILPL', 'PPLEZIER', 'PFIETS', 'PINBOED', 'PBYSTAND', 'AWAPART', 'AWABEDR', 'AWALAND', 'APERSAUT', 'ABESAUT', 'AMOTSCO', 'AVRAAUT', 'AAANHANG', 'ATRACTOR', 'AWERKT', 'ABROM', 'ALEVEN', 'APERSONG', 'AGEZONG', 'AWAOREG', 'ABRAND', 'AZEILPL', 'APLEZIER', 'AFIETS', 'AINBOED', 'ABYSTAND', 'CARAVAN')
-setwd("E:\\Darkstar\\Maestria\\2016\\III_cuatri\\Mineria\\Proyecto\\ProyetoFinalMineriaDatos")
 datos = read.table('ticdata2000.txt', header = F, col.names = columnas)
 datos$MOSTYPE <- factor(datos$MOSTYPE)
 datos$MGEMLEEF <- factor(datos$MGEMLEEF)
@@ -264,12 +263,12 @@ set.seed(123456)
 splitted <- sample.split(datos, SplitRatio = 0.7)
 datos.entrenamiento <- datos[splitted,]
 datos.prueba <- datos[!splitted,]
-#summary(datos.entrenamiento)
-#summary(datos.prueba)
 #Retirar factores 5 y 6 de PINBOED de datos de prueba porque no está en datos de entrenamiento
 datos.prueba <- datos.prueba[datos.prueba$PINBOED != 6 & datos.prueba$PINBOED != 5,]
 ```
+
 Una parte importante de estos datos es describir la distribución de la variable que se desea predecir, la cual es CARAVAN, a fin de conocer cuantos clientes poseen el seguro de caravanas, o no.
+
 ```{r gráfico seguros caravanas}
 barplot(table(datos.prueba$CARAVAN), 
         main="Distribución de compra de seguros",
@@ -286,9 +285,11 @@ barplot(table(compraronSeguros$MOSTYPE),
         xlab = "Tipo de cliente",
         ylab = "cantidad de clientes")
 ```
+
 Es posible observar que, de todos los clientes que compraron un seguro, la gran mayoría son familias de clase media, seguido por familias de clase baja, pero que son grandes (tipos 8 y 33 en el conjunto de datos) 
 
 A fin de poder verificar si existen relaciones entre clientes y adquisición del producto, es importante conocer la distribución de los tipos de clientes del conjunto de datos:
+
 ``` {r gráfico tipos de clientes}
 barplot(table(datos.entrenamiento$MOSTYPE),
         main = "Distribución de tipos de clientes  \nen el conjunto de datos",
@@ -306,12 +307,15 @@ barplot(table(noCompraronSeguros$MOSTYPE),
         xlab = 'Tipo de cliente',
         ylab = 'cantidad de clientes')
 ```
+
 Aquí es claro ver que la gran mayoría de los clientes que no compraron seguro fueron los de baja clase, lo que puede indicar que la clase es un factor determinante en caso de ser necesaria una predicción.
 A continuación se analiza la variable de respuesta por edad promedio para ver si existen relaciones entre ambas variables.
+
 ```{r, tidy=TRUE}
 library("lattice")
 histogram(~MGEMLEEF|CARAVAN,data=datos.entrenamiento,xlab="Edad Promedio", main="Edad Promedio por Seguro Caravana")
 ```
+
 Tanto los que adquirieron como los que no adquirieron seguro de caravana presentan el mismo patrón en los rangos de edades promedio. Probablemente, esto implique que no sea una variable determinante para la variable de respuesta.
 
 Otro factor que podría ser útil es el ingreso de las familias.
@@ -365,7 +369,6 @@ Para estos datos, se aplicarán tres modelos de minería de datos, a fin de cono
 
 ```{r, tidy=TRUE}
 modelo.logistica <- glm(CARAVAN ~ ., data = datos.entrenamiento, family = binomial)
-#summary(modelo.logistica)
 ```
 
 El modelo con todas las variables muestra algunas variables ficticias con significancia, se desechan las que no aparecen entre ellas y se intenta un nuevo modelo.
@@ -385,6 +388,7 @@ El AIC bajó aún más pero aún no todas las variables tienen significancia.
 ### Árbol de decisión
 
 Se crea un árbol de decisión a fin de poder predecir la variable que se desea, es decir, la variable de CARAVAN, utilizando todos las demás como argumentos:
+
 ``` {r Creación árbol decisión}
 library(rpart)
 library(rpart.plot)
@@ -394,6 +398,7 @@ prp(modelo.arbol)
 
 Es posible ver que, para este modelo en particular, se indicara que, para todas las posibles entradas, el valor será de cero, lo que quiere decir que ningún cliente comprará un seguro.
 Ahora se intenta usar las variables del último modelo de regresión lineal.
+
 ```{r, tidy=TRUE}
 modelo2.arbol = rpart(CARAVAN ~ MGODRK + MGODOV + MGODGE + MOPLHOOG + MBERMIDD + MBERARBG + MBERARBO + MAUT0 + PPERSAUT, data = datos.entrenamiento)
 prp(modelo2.arbol)
@@ -404,15 +409,11 @@ Nuevamente se obtiene el mismo resultado.
 ###Bosque aleatorio
 
 Se procede a crear el modelo de árbol aleatorio. EL tamaño del bosque queda con sus valores predeterminados, de 500. 
+
 ```{r modelo-bosque-aleatorio}
 library(randomForest)
 modelo.bosque = randomForest(CARAVAN ~ ., data= datos.entrenamiento)
 modelo2.bosque = randomForest(CARAVAN ~ MGODRK + MGODOV + MGODGE + MOPLHOOG + MBERMIDD + MBERARBG + MBERARBO + MAUT0 + PPERSAUT, data= datos.entrenamiento)
-```
-
-A fin de verificar la creación del modelo, se procede a imprimir uno de los árboles creados en los bosques
-```{r modelo-bosque-aleatorio-imprimir}
-#getTree(modelo3.bosque, 3)
 ```
 
 #Evaluación
